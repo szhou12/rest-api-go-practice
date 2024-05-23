@@ -5,6 +5,13 @@
 # Table of Contents
 * [STEP 0: Initialize Project](#step-0-initialize-project)
 
+## Third-Party Dependencies
+```bash
+go get -u github.com/gorilla/mux
+```
+
+
+
 ## STEP 0: Initialize Project
 1. Choose a directory on your local machine (e.g. `github`). Create a new directory (e.g. `rest-api-go-practice`). Go into this newly created directory.
 ```
@@ -21,4 +28,5 @@ NOTE: `github.com/username/` is a part of the module path for Go to manage. It i
     - add and edit `.gitignore`
     - add `README.md`
 
+## STEP 1: API Server
 
