@@ -29,4 +29,11 @@ NOTE: `github.com/username/` is a part of the module path for Go to manage. It i
     - add `README.md`
 
 ## STEP 1: API Server
-
+```
+project/
+├── main.go
+└── api.go
+    └── APIServer <struct>
+        ├── NewAPIServer() <constructor>
+        └── Serve() <method>
+```
