@@ -8,6 +8,7 @@
 ## Third-Party Dependencies
 ```bash
 go get -u github.com/gorilla/mux
+go get -u github.com/go-sql-driver/mysql
 ```
 
 
@@ -36,4 +37,19 @@ project/
     └── APIServer <struct>
         ├── NewAPIServer() <constructor>
         └── Serve() <method>
+```
+## STEP 2: Database
+```
+project/
+├── main.go
+├── api.go
+├── store.go
+│   ├── Store <interface>
+│   └── Storage <struct>
+│        ├── NewStore() <constructor>
+│        └── CreateUser() <method>
+└── db.go
+    ├── MySQLStorage <struct>
+    ├── NewMySQLStorage() <constructor>
+    └── Init() <method>
 ```
