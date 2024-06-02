@@ -8,21 +8,28 @@ import (
 
 func main() {
 	cfg := mysql.Config{
-		User:                 "root",
-		Passwd:               "mypassword",
-		Addr:                 "",
-		DBName:               "projectmanager",
+		User:                 Envs.DBUser,
+		Passwd:               Envs.DBPassword,
+		Addr:                 Envs.DBAddress,
+		DBName:               Envs.DBName,
 		Net:                  "tcp",
 		AllowNativePasswords: true,
 		ParseTime:            true,
 	}
+
+	// MySQL storage configuration
 	sqlStorage := NewMySQLStorage(cfg)
+
+	// Initialize the database
 	db, err := sqlStorage.Init()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Initialize the store
 	store := NewStore(db)
 
+	// Inject the store into the API server
 	api := NewAPIServer(":3000", store)
 	api.Serve()
 }

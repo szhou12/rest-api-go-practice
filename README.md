@@ -4,6 +4,9 @@
 
 # Table of Contents
 * [STEP 0: Initialize Project](#step-0-initialize-project)
+* [STEP 1: API Server](#step-1-api-server)
+* [STEP 2: Database](#step-2-database)
+* [STEP 3: Environment Variables Sourcing](#step-3-environment-variables-sourcing)
 
 ## Third-Party Dependencies
 ```bash
@@ -36,7 +39,7 @@ project/
 └── api.go
     └── APIServer <struct>
         ├── NewAPIServer() <constructor>
-        └── Serve() <method>
+        └── Serve()        <method>
 ```
 ## STEP 2: Database
 ```
@@ -45,11 +48,60 @@ project/
 ├── api.go
 ├── store.go
 │   ├── Store <interface>
+│   │    └── CreateUser()
 │   └── Storage <struct>
-│        ├── NewStore() <constructor>
-│        └── CreateUser() <method>
+│        ├── NewStore()    <constructor>
+│        └── CreateUser()  <method>
 └── db.go
-    ├── MySQLStorage <struct>
-    ├── NewMySQLStorage() <constructor>
-    └── Init() <method>
+    └── MySQLStorage <struct>
+        ├── NewMySQLStorage() <constructor>
+        └── Init()            <method>
+```
+## STEP 3: Environment Variables Sourcing
+```
+project/
+├── main.go
+├── api.go
+├── store.go
+├── db.go
+└── config.go
+    ├── Config        <struct>
+    ├── Envs          <Config-type global variable>
+    ├── initConfig()  <constructor>
+    └── getEnv()
+```
+- Pause for a second! Let's be clear about the workflow of the main program!
+    1. First, it creates a `mysql.Config` struct, which holds the configuration for connecting to a MySQL database. The configuration values are taken from the `Envs` variable, which holds environment variables. The `Net` field is set to `"tcp"`, indicating that the connection to the MySQL server should be made over TCP. `AllowNativePasswords` is set to `true`, which allows the use of the native MySQL password authentication method. `ParseTime` is set to `true`, which tells the driver to parse `DATE` and `DATETIME` columns into `time.Time` values.
+    2. Next, it calls `NewMySQLStorage(cfg)`, which creates a new `MySQLStorage` object. This object is responsible for interacting with the MySQL database. It uses the configuration provided to establish a connection to the database.
+    3. The `Init` method of the `MySQLStorage` object is then called to initialize the database. If there's an error during this process, the application will log the error and exit.
+    4. After the database has been initialized, a new `Store` is created with `NewStore(db)`. This `Store` object is responsible for performing operations on the database.
+    5. Finally, a new `APIServer` is created with `NewAPIServer(":3000", store)`. This server is configured to listen on port 3000 and uses the `Store` for its database operations. The `Serve` method is then called to start the server and begin listening for incoming HTTP requests.
+```go
+func main() {
+	cfg := mysql.Config{
+		User:                 Envs.DBUser,
+		Passwd:               Envs.DBPassword,
+		Addr:                 Envs.DBAddress,
+		DBName:               Envs.DBName,
+		Net:                  "tcp",
+		AllowNativePasswords: true,
+		ParseTime:            true,
+	}
+
+	// MySQL storage configuration
+	sqlStorage := NewMySQLStorage(cfg)
+
+	// Initialize the database
+	db, err := sqlStorage.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Initialize the store
+	store := NewStore(db)
+
+	// Inject the store into the API server
+	api := NewAPIServer(":3000", store)
+	api.Serve()
+}
 ```
