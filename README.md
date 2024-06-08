@@ -23,11 +23,12 @@ cd /path/to/github/
 mkdir rest-api-go-practice
 cd rest-api-go-practice
 ```
-2.  Initialize a Go module within this directory.
+2. Initialize a Go module within this directory.
 ```
 go mod init github.com/username/rest-api-go-practice // go mod init <module-path>
 ```
-NOTE: `github.com/username/` is a part of the module path for Go to manage. It is NOT creating new folders (`github.com`, `username`) on your local machine. Rather, `github.com/username/rest-api-go-practice` is used within the Go ecosystem to help Go uniquely identify this project (aka module). Because domain names (e.g. `github.com`) are unique on the Internet, using this convention ensures global uniqueness of this module path. If you are linking the project to a remote repository hosted on GitHub, it is the common practice to use the full GitHub path `github.com/<username>/<project-name>` as Go module path to be the unique identifier. Two advantages of doing so: 1. using domain name ensures global uniqueness. 2. helps other developers easily find the source repository on GitHub. 
+NOTE: `github.com/username/` is a part of the module path for Go to manage. It is NOT creating new folders (`github.com`, `username`) on your local machine. Rather, `github.com/username/rest-api-go-practice` is used within the Go ecosystem to help Go uniquely identify this project (aka module). Because domain names (e.g. `github.com`) are unique on the Internet, using this convention ensures global uniqueness of this module path. If you are linking the project to a remote repository hosted on GitHub, it is the common practice to use the full GitHub path `github.com/<username>/<project-name>` as Go module path to be the unique identifier. Two advantages of doing so: 1). using domain name ensures global uniqueness. 2). helps other developers easily find the source repository on GitHub. 
+
 3. Create a new repository on Github. The repository name should be the same as `rest-api-go-practice`. Link the local project to the remote repository by following the instructions provided by GitHub.
     - add and edit `.gitignore`
     - add `README.md`
@@ -70,7 +71,7 @@ project/
     ├── initConfig()  <constructor>
     └── getEnv()
 ```
-- Pause for a second! Let's be clear about the workflow of the main program!
+- **Pause for a second!** Let's be clear about the workflow of the main program!
     1. First, it creates a `mysql.Config` struct, which holds the configuration for connecting to a MySQL database. The configuration values are taken from the `Envs` variable, which holds environment variables. The `Net` field is set to `"tcp"`, indicating that the connection to the MySQL server should be made over TCP. `AllowNativePasswords` is set to `true`, which allows the use of the native MySQL password authentication method. `ParseTime` is set to `true`, which tells the driver to parse `DATE` and `DATETIME` columns into `time.Time` values.
     2. Next, it calls `NewMySQLStorage(cfg)`, which creates a new `MySQLStorage` object. This object is responsible for interacting with the MySQL database. It uses the configuration provided to establish a connection to the database.
     3. The `Init` method of the `MySQLStorage` object is then called to initialize the database. If there's an error during this process, the application will log the error and exit.
